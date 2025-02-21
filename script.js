@@ -10,7 +10,7 @@ function multiply(a, b) {
     return a * b;
 }
 
-function multiply(a, b) {
+function divide(a, b) {
     return a / b;
 }
 
@@ -18,13 +18,10 @@ function operate(leftOperand, rightOperand, operator) {
     switch (operator) {
         case "+": 
             return add(leftOperand, rightOperand);
-            break;
         case "-":
             return subtract(leftOperand, rightOperand);
-            break;
         case "*":
             return multiply(leftOperand, rightOperand);
-            break;
         case "/":
             return divide(leftOperand, rightOperand);
     }
