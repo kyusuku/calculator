@@ -27,8 +27,30 @@ function operate(leftOperand, rightOperand, operator) {
     }
 }
 
+let leftOperand = '';
+let rightOperand = '';
+let operator = '';
+let displayNumber = '0';
+
 const digits = document.querySelectorAll('.digit');
+const operators = document.querySelectorAll('.operators');
 const display = document.querySelector('.display');
+const clear = document.querySelector('.clear');
+const negate = document.querySelector('.negate');
+const equal = document.querySelector('.equal');
+
+// clear.addEventListener('click', () => {
+//     displayNumber = '0';
+//     display.textContent = displayNumber;
+//     leftOperand = '';
+//     rightOperand = '';
+//     operator = '';
+// });
+
+// negate.addEventListener('click', () => {
+//     displayNumber.unshift('-');
+//     display.textContent = displayNumber;
+// });
 
 digits.forEach(digit => {
     digit.addEventListener('click', (event) => { 
@@ -47,9 +69,17 @@ digits.forEach(digit => {
     });
 });
 
-let leftOperand = '';
-let rightOperand = '';
-let operator = '';
-let displayNumber = '0';
-let start = false;
+operators.forEach(op => {
+    op.addEventListener('click', (e) => {
+        leftOperand = displayNumber;
+        operator = e.target.dataset.value;
+        displayNumber = '0';
+    });
+});
 
+equal.addEventListener('click', () => {
+    rightOperand = displayNumber;
+    let result = operate(Number(leftOperand), Number(rightOperand), operator)
+    displayNumber = result.toString();
+    display.textContent = displayNumber;
+});
