@@ -47,10 +47,14 @@ clear.addEventListener('click', () => {
     operator = '';
 });
 
-// negate.addEventListener('click', () => {
-//     displayNumber.unshift('-');
-//     display.textContent = displayNumber;
-// });
+negate.addEventListener('click', () => {
+    if (displayNumber[0] === '-') {
+        displayNumber = displayNumber.slice(1);
+    } else {
+        displayNumber = '-' + displayNumber;
+    }
+    display.textContent = displayNumber;
+});
 
 digits.forEach(digit => {
     digit.addEventListener('click', (event) => { 
