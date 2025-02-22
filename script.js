@@ -37,6 +37,8 @@ const operators = document.querySelectorAll('.operators');
 const display = document.querySelector('.display');
 const clear = document.querySelector('.clear');
 const negate = document.querySelector('.negate');
+const percent = document.querySelector('.percent');
+const dot = document.querySelector('.dot');
 const equal = document.querySelector('.equal');
 
 clear.addEventListener('click', () => {
@@ -56,11 +58,21 @@ negate.addEventListener('click', () => {
     display.textContent = displayNumber;
 });
 
+percent.addEventListener('click', () => {
+    displayNumber = displayNumber / 100;
+    display.textContent = displayNumber;
+});
+
+dot.addEventListener('click', () => {
+    displayNumber += '.';
+    display.textContent = displayNumber;
+});
+
 digits.forEach(digit => {
     digit.addEventListener('click', (event) => { 
         const digitValue = event.target.dataset.value;
 
-        if (displayNumber[0] === '0') {
+        if (displayNumber[0] === '0' && displayNumber[1] !== '.') {
             if (digitValue !== '0') {
                 displayNumber = '';
                 displayNumber += digitValue;
