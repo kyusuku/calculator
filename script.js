@@ -39,13 +39,13 @@ const clear = document.querySelector('.clear');
 const negate = document.querySelector('.negate');
 const equal = document.querySelector('.equal');
 
-// clear.addEventListener('click', () => {
-//     displayNumber = '0';
-//     display.textContent = displayNumber;
-//     leftOperand = '';
-//     rightOperand = '';
-//     operator = '';
-// });
+clear.addEventListener('click', () => {
+    displayNumber = '0';
+    display.textContent = displayNumber;
+    leftOperand = '';
+    rightOperand = '';
+    operator = '';
+});
 
 // negate.addEventListener('click', () => {
 //     displayNumber.unshift('-');
