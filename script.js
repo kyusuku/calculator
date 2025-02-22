@@ -27,7 +27,29 @@ function operate(leftOperand, rightOperand, operator) {
     }
 }
 
-let leftOperand;
-let rightOperand;
-let operator;
+const digits = document.querySelectorAll('.digit');
+const display = document.querySelector('.display');
+
+digits.forEach(digit => {
+    digit.addEventListener('click', (event) => { 
+        const digitValue = event.target.dataset.value;
+
+        if (displayNumber[0] === '0') {
+            if (digitValue !== '0') {
+                displayNumber = '';
+                displayNumber += digitValue;
+            } 
+        } else {
+            displayNumber += digitValue;
+        }
+        
+        display.textContent = displayNumber;
+    });
+});
+
+let leftOperand = '';
+let rightOperand = '';
+let operator = '';
+let displayNumber = '0';
+let start = false;
 
