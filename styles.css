@@ -86,6 +86,11 @@ h1 {
     background-color: rgba(255, 166, 0, 0.76);
 }
 
+.container button:active {
+    background-color: orange;
+}
+
+
 div .zero {
     width: 130px;
 }
