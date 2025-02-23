@@ -11,7 +11,7 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-    return a / b;
+    return b === 0 ? "nice try" : a / b;
 }
 
 function operate(leftOperand, rightOperand, operator) {
@@ -27,10 +27,24 @@ function operate(leftOperand, rightOperand, operator) {
     }
 }
 
+function updateDisplay() {
+    if (displayNumber.includes('.')) {
+        if (displayNumber.includes('e-')) {
+            displayNumber = Number(displayNumber).toFixed(displayNumber.toString().split('-')[1]);
+        }
+        display.textContent = displayNumber.slice(0, 13);
+    } else if (displayNumber.length > 13) {
+        display.textContent = Number(displayNumber).toExponential(2);
+    } else {
+        display.textContent = displayNumber;
+    }
+}
+
 let leftOperand = '';
 let rightOperand = '';
 let operator = '';
-let displayNumber = '0';
+let displayNumber = '';
+let operated = false;
 
 const digits = document.querySelectorAll('.digit');
 const operators = document.querySelectorAll('.operators');
@@ -42,60 +56,97 @@ const dot = document.querySelector('.dot');
 const equal = document.querySelector('.equal');
 
 clear.addEventListener('click', () => {
-    displayNumber = '0';
-    display.textContent = displayNumber;
     leftOperand = '';
     rightOperand = '';
     operator = '';
+    displayNumber = '';
+    operated = false;
+    updateDisplay();
 });
 
 negate.addEventListener('click', () => {
     if (displayNumber[0] === '-') {
         displayNumber = displayNumber.slice(1);
+    } else if (displayNumber === '0' || !displayNumber) {
+        displayNumber = displayNumber;
     } else {
         displayNumber = '-' + displayNumber;
     }
-    display.textContent = displayNumber;
+    
+    updateDisplay();
 });
 
 percent.addEventListener('click', () => {
-    displayNumber = displayNumber / 100;
-    display.textContent = displayNumber;
+    displayNumber = (Number(displayNumber) / 100).toString();
+    updateDisplay();
 });
 
 dot.addEventListener('click', () => {
-    displayNumber += '.';
-    display.textContent = displayNumber;
+    if (!displayNumber.includes('.')) {
+        displayNumber = displayNumber === '' ? '0.' : displayNumber + '.';
+    }
+    updateDisplay();
 });
 
 digits.forEach(digit => {
     digit.addEventListener('click', (event) => { 
         const digitValue = event.target.dataset.value;
 
-        if (displayNumber[0] === '0' && displayNumber[1] !== '.') {
+        if (leftOperand && operator === '') {
+            displayNumber = '';
+            displayNumber += digitValue;
+            leftOperand = '';
+        } else if (operated) {
+            displayNumber = '';
+            displayNumber += digitValue;
+            operated = false;
+        }
+        else if (displayNumber[0] === '0' && displayNumber.length === 1) {
             if (digitValue !== '0') {
-                displayNumber = '';
-                displayNumber += digitValue;
-            } 
+                displayNumber = digitValue;
+            }
         } else {
             displayNumber += digitValue;
         }
-        
-        display.textContent = displayNumber;
+
+        updateDisplay();
     });
 });
 
 operators.forEach(op => {
     op.addEventListener('click', (e) => {
-        leftOperand = displayNumber;
-        operator = e.target.dataset.value;
-        displayNumber = '0';
+        if (leftOperand === '') {
+            leftOperand = displayNumber;
+            operator = e.target.dataset.value;
+            operated = true;
+        } else if (operated || (leftOperand && !operator)) {
+            operator = e.target.dataset.value;
+            operated = true;
+        } else if (leftOperand && operator && !operated) {
+            rightOperand = displayNumber;
+            let result = operate(Number(leftOperand), Number(rightOperand), operator);
+            displayNumber = result.toString();
+            updateDisplay();
+            leftOperand = displayNumber;
+            operator = e.target.dataset.value;
+            operated = true;
+            rightOperand = '';
+        }
     });
 });
 
 equal.addEventListener('click', () => {
-    rightOperand = displayNumber;
-    let result = operate(Number(leftOperand), Number(rightOperand), operator)
-    displayNumber = result.toString();
-    display.textContent = displayNumber;
+    if (!operator) {
+        return;
+    }
+
+    if (leftOperand && operator && !operated) {
+        rightOperand = displayNumber;
+        let result = operate(Number(leftOperand), Number(rightOperand), operator);
+        displayNumber = result.toString();
+        updateDisplay();
+        leftOperand = displayNumber;
+        operator = '';
+        rightOperand = '';
+    }
 });
